@@ -21,11 +21,11 @@ namespace myun2
 				unsigned int left;
 				unsigned int right;
 				unsigned int _padding;
-			};
-			header head;
-			node nodes[RecCount - 1];
+			} head;
+			static const int NodeCount = RecCount - 2;
+			node nodes[NodeCount];
 
-			bool is_full() const { return head.used >= RecCount -1; }
+			bool is_full() const { return head.used >= NodeCount; }
 			void add(const node& n) {
 				nodes[head.used] = n;
 				head.used++;
