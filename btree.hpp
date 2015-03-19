@@ -22,12 +22,19 @@ namespace myun2
 			header head;
 			node nodes[RecCount - 1];
 		};
+		block root;
 		void init() {
-			if ( alc.empty() ) { allocate(); }
+			if ( alc.empty() ) {
+				root = allocate();
+			}
+			else {
+				root = alc[0];
+			}
 		}
-		void allocate() {
+		block allocate() {
 			block blk = { 0,0,0,0 };
 			alc.write(&blk, sizeof(block));
+			return blk;
 		}
 	public:
 		btree(){ init(); }
