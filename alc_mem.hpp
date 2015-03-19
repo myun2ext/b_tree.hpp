@@ -33,7 +33,7 @@ namespace myun2
 				return p;
 			}
 			void* operator[](unsigned int i) {
-				return ptrs[pos];
+				return ptrs[i];
 			}
 		};
 	}

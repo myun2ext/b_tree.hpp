@@ -28,7 +28,7 @@ namespace myun2
 				root = allocate();
 			}
 			else {
-				root = alc[0];
+				root = *(block*)alc[0];
 			}
 		}
 		block allocate() {

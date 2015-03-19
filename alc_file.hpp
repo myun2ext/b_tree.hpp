@@ -27,8 +27,8 @@ namespace myun2
 				return p;
 			}
 			void* operator[](unsigned int i) {
-				char* buffer = char new [size];
-				return read(i * size, buffer, size);
+				char* buffer = new char[_block_size];
+				return read(i * _block_size, buffer, _block_size);
 			}
 		};
 	}
