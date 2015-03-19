@@ -10,8 +10,14 @@ namespace myun2
 		class mem_alloc
 		{
 		private:
-			::std::vector<void*> ptr_list;
+			::std::vector<void*> ptrs;
 		public:
+			bool empty() const { return ptrs.empty(); }
+			void *root() { return ptrs[0]; }
+			void* allocate(size_t size) {
+				ptrs.push_back(new char[size]);
+				return *(ptrs.rbegin());
+			}
 		};
 	}
 }
