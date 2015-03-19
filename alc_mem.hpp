@@ -30,7 +30,7 @@ namespace myun2
 			}
 			size_t write(long pos, const void* p, size_t size)
 			{
-				ptrs[pos] = p;
+				ptrs[pos] = (void*)p;
 				return size;
 			}
 			void* read(long pos, void* p, size_t size) {

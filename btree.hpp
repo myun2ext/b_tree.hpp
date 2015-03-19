@@ -14,19 +14,27 @@ namespace myun2
 		};
 		struct block {
 			struct header {
-				unsigned int used;
+				unsigned char used;
+				unsigned char _reserved;	//	Locking Flag
+				unsigned char _reserved2;
+				unsigned char _reserved3;
 				unsigned int left;
 				unsigned int right;
 				unsigned int _padding;
 			};
 			header head;
 			node nodes[RecCount - 1];
+
+			bool is_full() const { return head.used >= RecCount -1; }
+			void add(const node& n) {
+				nodes[head.used] = n;
+				head.used++;
+			}
 		};
 		block root;
 		void init() {
-			if ( alc.empty() ) {
+			if ( alc.empty() )
 				root = allocate();
-			}
 			else {
 				root = *(block*)alc[0];
 			}
@@ -36,11 +44,18 @@ namespace myun2
 			alc.write(&blk, sizeof(block));
 			return blk;
 		}
+		block* _block(unsigned int i) { return (block*)alc[i]; }
+		void put_block(unsigned int i, const block* blk) { return (block*)alc[i]; }
 	public:
 		btree(){ init(); }
 		btree(const Alloc& _alc) : alc(_alc) { init(); }
-		void insert(const Key& key, const Value& value) {
+
+		void insert(const Key& key, const Value& value)
+		{
 			node n = { key, value };
+			if ( root.is_full() ) { /* TODO */ }
+			root.add(n);
+			alc.write(0, &root, sizeof(root));
 		}
 	};
 }
