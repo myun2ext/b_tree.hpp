@@ -42,14 +42,14 @@ namespace myun2
 				head.used++;
 			}
 		};
-		block root;
+		//block root;
 		void init() {
 			alc.set_block_size(sizeof(block));
 
 			if ( alc.empty() )
-				root = allocate();
+				/*root =*/ allocate();
 			else {
-				root = *(block*)alc[0];
+				/*root =*/ *(block*)alc[0];
 			}
 		}
 		block allocate() {
@@ -58,6 +58,7 @@ namespace myun2
 			return blk;
 		}
 		block* _block(unsigned int i) { return (block*)alc[i]; }
+		block& get_block(unsigned int i) { return *(block*)alc[i]; }
 		void put_block(unsigned int i, const block* blk) { return (block*)alc[i]; }
 
 		block split(long pos, block& blk)
@@ -72,27 +73,30 @@ namespace myun2
 			{
 				if ( blk.nodes[base_i].k < blk.nodes[i].k )
 				{
-					//left_block.add(blk.nodes[base_i]);
 					right_block.add(blk.nodes[i]);
 				}
 				else {
 					left_block.add(blk.nodes[i]);
-					//right_block.add(blk.nodes[base_i]);
 				}
 			}
-
 			long left_pos = alc.write(&left_block);
 			right_block.head.left = left_pos;
 
 			alc.write(pos, &right_block);
 			return right_block;
 		}
-		void insert(long pos, const node& n)
+		void add(long pos, const node& n)
 		{
-			root.add(n);
-			alc.write(0, &root);
-
-			if ( root.is_full() ) { root = split(0, root); }
+			block &blk = get_block(pos);
+			if ( blk.head.left && n.k < blk.nodes[0].k )
+			{
+				add(blk.head.left, n);
+				return;
+			}
+			blk.add(n);
+			alc.write(pos, &blk);
+			if ( blk.is_full() )
+				split(pos, blk);
 		}
 	public:
 		btree(){ init(); }
@@ -101,7 +105,7 @@ namespace myun2
 		void insert(const Key& key, const Value& value)
 		{
 			node n = { key, value };
-			insert(0, n);
+			add(0, n);
 		}
 	};
 }
