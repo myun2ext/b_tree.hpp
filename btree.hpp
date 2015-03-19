@@ -13,7 +13,6 @@ namespace myun2
 			Value v;
 		};
 		struct block {
-
 			struct header {
 				unsigned char used;
 				unsigned char _reserved;	//	Locking Flag
@@ -59,8 +58,14 @@ namespace myun2
 		block* _block(unsigned int i) { return (block*)alc[i]; }
 		void put_block(unsigned int i, const block* blk) { return (block*)alc[i]; }
 
-		void split(block& blk) {
+		void split(block& blk)
+		{
 			block new_block;
+
+			for(unsigned int i=0; i<blk.head.used; i++)
+			{
+				blk.nodes[i]
+			}
 			alc.write(&new_block);
 		}
 	public:
@@ -70,8 +75,8 @@ namespace myun2
 		void insert(const Key& key, const Value& value)
 		{
 			node n = { key, value };
-			if ( root.is_full() ) { split(root); }
 			root.add(n);
+			if ( root.is_full() ) { split(root); }
 			alc.write(0, &root);
 		}
 	};
