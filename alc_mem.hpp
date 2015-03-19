@@ -12,7 +12,9 @@ namespace myun2
 		{
 		private:
 			::std::vector<void*> ptrs;
+			size_t _block_size;
 		public:
+			void set_block_size(size_t size) { _block_size = size; }
 			bool empty() const { return ptrs.empty(); }
 
 			void* write(size_t size) {
@@ -29,6 +31,9 @@ namespace myun2
 			void* read(long pos, void* p, size_t size) {
 				memcpy(p, ptrs[pos], size);
 				return p;
+			}
+			void* operator[](unsigned int i) {
+				return ptrs[pos];
 			}
 		};
 	}

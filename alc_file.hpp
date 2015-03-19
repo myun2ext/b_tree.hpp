@@ -13,8 +13,10 @@ namespace myun2
 				fseek(fp, 0, SEEK_END);
 				return ftell(fp);
 			}
+			size_t _block_size;
 		public:
 			file_alloc(const char* filename) { fp = fopen(filename, "w+b"); }
+			void set_block_size(size_t size) { _block_size = size; }
 			bool empty() const { return size() == 0; }
 
 			size_t write(const void* p, size_t size) {
@@ -23,6 +25,10 @@ namespace myun2
 			void* read(long pos, void* p, size_t size) {
 				fread(p, size, 1, fp);
 				return p;
+			}
+			void* operator[](unsigned int i) {
+				char* buffer = char new [size];
+				return read(i * size, buffer, size);
 			}
 		};
 	}
