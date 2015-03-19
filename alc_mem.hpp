@@ -12,28 +12,28 @@ namespace myun2
 		{
 		private:
 			::std::vector<void*> ptrs;
-			size_t _block_size;
+			size_t size;
 		public:
-			void set_block_size(size_t size) { _block_size = size; }
+			void set_block_size(size_t _size) { size = _size; }
 			bool empty() const { return ptrs.empty(); }
 
-			void* write(size_t size) {
+			void* allocate(size_t size) {
 				ptrs.push_back(new char[size]);
 				return *(ptrs.rbegin());
 			}
-			size_t write(const void* p, size_t size)
+			size_t write(const void* p)
 			{
 				void *buffer = new char[size];
 				memcpy(buffer, p, size);
 				ptrs.push_back(buffer);
 				return size;
 			}
-			size_t write(long pos, const void* p, size_t size)
+			size_t write(long pos, const void* p)
 			{
 				ptrs[pos] = (void*)p;
 				return size;
 			}
-			void* read(long pos, void* p, size_t size) {
+			void* read(long pos, void* p) {
 				memcpy(p, ptrs[pos], size);
 				return p;
 			}

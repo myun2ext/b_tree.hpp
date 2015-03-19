@@ -53,7 +53,7 @@ namespace myun2
 		}
 		block allocate() {
 			block blk;
-			alc.write(&blk, sizeof(block));
+			alc.write(&blk);
 			return blk;
 		}
 		block* _block(unsigned int i) { return (block*)alc[i]; }
@@ -72,7 +72,7 @@ namespace myun2
 			node n = { key, value };
 			if ( root.is_full() ) { split(root); }
 			root.add(n);
-			alc.write(0, &root, sizeof(root));
+			alc.write(0, &root);
 		}
 	};
 }
