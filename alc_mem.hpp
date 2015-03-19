@@ -28,6 +28,11 @@ namespace myun2
 				ptrs.push_back(buffer);
 				return size;
 			}
+			size_t write(long pos, const void* p, size_t size)
+			{
+				ptrs[pos] = p;
+				return size;
+			}
 			void* read(long pos, void* p, size_t size) {
 				memcpy(p, ptrs[pos], size);
 				return p;

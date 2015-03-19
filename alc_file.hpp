@@ -20,9 +20,15 @@ namespace myun2
 			bool empty() const { return size() == 0; }
 
 			size_t write(const void* p, size_t size) {
+				fseek(fp, 0, SEEK_END);
+				return fwrite(p, size, 1, fp);
+			}
+			size_t write(long pos, const void* p, size_t size) {
+				fseek(fp, pos * size, SEEK_SET);
 				return fwrite(p, size, 1, fp);
 			}
 			void* read(long pos, void* p, size_t size) {
+				fseek(fp, pos * size, SEEK_SET);
 				fread(p, size, 1, fp);
 				return p;
 			}
