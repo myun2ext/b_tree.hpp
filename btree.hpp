@@ -7,19 +7,19 @@ namespace myun2
 	class btree
 	{
 	private:
+		Alloc alc;
 		struct node {
 			Key k;
 			Value v;
 		};
-		Alloc alc;
 		void init() {
 			if ( alc.empty() ) alc.allocate(sizeof(node) * RecCount);
 		}
 	public:
 		btree(){ init(); }
 		btree(const Alloc& _alc) : alc(_alc) { init(); }
-
-		void insert(const Value& value) {
+		void insert(const Key& key, const Value& value) {
+			node n = { key, value };
 		}
 	};
 }
