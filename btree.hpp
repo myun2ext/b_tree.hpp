@@ -3,7 +3,7 @@
 
 namespace myun2
 {
-	template <typename Alloc, typename Key, typename Value, unsigned int RecCount=8>
+	template <typename Alloc, typename Key, typename Value, unsigned int RecordSize=8>
 	class btree
 	{
 	private:
@@ -13,6 +13,7 @@ namespace myun2
 			Value v;
 		};
 		struct block {
+
 			struct header {
 				unsigned char used;
 				unsigned char _reserved;	//	Locking Flag
@@ -21,8 +22,19 @@ namespace myun2
 				unsigned int left;
 				unsigned int right;
 				unsigned int _padding;
+
+				header() {
+					used = 0;
+                    _reserved = 0;
+                    _reserved2 = 0;
+                    _reserved3 = 0;
+                    left = 0;
+                    right = 0;
+                    _padding = 0;
+				}
 			} head;
-			static const int NodeCount = RecCount - 2;
+
+			static const int NodeCount = RecordSize - (sizeof(header) / sizeof(node));
 			node nodes[NodeCount];
 
 			bool is_full() const { return head.used >= NodeCount; }
@@ -40,12 +52,17 @@ namespace myun2
 			}
 		}
 		block allocate() {
-			block blk = { 0,0,0,0 };
+			block blk;
 			alc.write(&blk, sizeof(block));
 			return blk;
 		}
 		block* _block(unsigned int i) { return (block*)alc[i]; }
 		void put_block(unsigned int i, const block* blk) { return (block*)alc[i]; }
+
+		void split(block& blk) {
+			block new_block;
+			alc.write(&new_block);
+		}
 	public:
 		btree(){ init(); }
 		btree(const Alloc& _alc) : alc(_alc) { init(); }
@@ -53,7 +70,7 @@ namespace myun2
 		void insert(const Key& key, const Value& value)
 		{
 			node n = { key, value };
-			if ( root.is_full() ) { /* TODO */ }
+			if ( root.is_full() ) { split(root); }
 			root.add(n);
 			alc.write(0, &root, sizeof(root));
 		}
