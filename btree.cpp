@@ -13,7 +13,6 @@ void btree_test(Bt& bt)
 	bt.insert(*(unsigned int*)"jklm", *(unsigned int*)"JKLM");
 	bt.insert(*(unsigned int*)"ghij", *(unsigned int*)"GHIJ");
 
-	bt.insert(*(unsigned int*)"abcd", *(unsigned int*)"ABCD");
 	bt.insert(*(unsigned int*)"opql", *(unsigned int*)"OPQL");
 	bt.insert(*(unsigned int*)"stuv", *(unsigned int*)"STUV");
 	bt.insert(*(unsigned int*)"vwxy", *(unsigned int*)"VWXY");
@@ -34,6 +33,7 @@ int main()
 	btree<btree_::file_alloc, unsigned int, unsigned int> bt_file("btree.db");
 
 	btree_test(bt_mem);
+	printf("file\n");
 	btree_test(bt_file);
 
 	return 0;
