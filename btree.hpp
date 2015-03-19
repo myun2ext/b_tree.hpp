@@ -1,11 +1,9 @@
 #ifndef __MYUN2__BTREE__HPP__
 #define __MYUN2__BTREE__HPP__
 
-#include <memory.h>
-
 namespace myun2
 {
-	template <typename Alloc, typename Key, typename Value, unsigned int RecCount=4>
+	template <typename Alloc, typename Key, typename Value, unsigned int RecCount=8>
 	class btree
 	{
 	private:
@@ -28,8 +26,8 @@ namespace myun2
 			if ( alc.empty() ) { allocate(); }
 		}
 		void allocate() {
-			block* p_blk = (block*)alc.allocate(sizeof(node) * RecCount);
-			memset(p_blk, 0x00, sizeof(block));
+			block blk = { 0,0,0,0 };
+			alc.write(&blk, sizeof(block));
 		}
 	public:
 		btree(){ init(); }
